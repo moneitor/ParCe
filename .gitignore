@@ -1,9 +1,9 @@
-**Main.cpp
-**Graphics.cpp
-**Graphics.h
-**Application.h
-**Application.cpp
-**.vscode**
-**assets**
+*Main.cpp
+*Graphics.cpp
+*Graphics.h
+*Application.h
+*Application.cpp
+*.vscode*
+assets/*
 .DS_Store
-dependencies**
+dependencies/*
