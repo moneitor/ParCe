@@ -5,5 +5,5 @@
 **Application.cpp
 **.vscode**
 **assets**
-**Store**
-**dependencies**
+.DS_Store
+dependencies**
