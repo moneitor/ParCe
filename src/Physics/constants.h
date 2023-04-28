@@ -1,0 +1,8 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+const int FPS = 30;
+const int MS_PER_FRAME = 1000 / FPS;
+const int PIXELS_PER_METER = 50;
+
+#endif
