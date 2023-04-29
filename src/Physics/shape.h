@@ -57,6 +57,8 @@ class PolygonShape: public Shape {
         virtual Shape *Clone() const override;
         void UpdateVertices(const Vec2 &pos, float angle);        
         std::vector<Edge> GetEdges();
+        Vec2 EdgeAt(int index) const;  
+
 };
 
 

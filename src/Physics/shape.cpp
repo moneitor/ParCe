@@ -76,6 +76,12 @@ ShapeType PolygonShape::GetType() const{
         return ShapeType::POLYGON;
 }
 
+Vec2 PolygonShape::EdgeAt(int index) const {
+    int currVertex = index;
+    int nextVertex = (index + 1) % this->vertices.size();
+    return this->vertices[nextVertex] - this->vertices[currVertex];
+}
+
 
 // BOX
 BoxShape::BoxShape(float width, float height)

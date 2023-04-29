@@ -6,7 +6,6 @@ Edge::Edge(const Vec2 &vertexA, const Vec2 &vertexB){
 }
 
 Edge::~Edge(){
-
 }
 
 Vec2 Edge::GetEdgeCenter(){
