@@ -63,12 +63,16 @@ void PolygonShape::UpdateVertices(const Vec2 &pos, float angle){
 }
 
 
-std::vector<Edge> PolygonShape::GetEdges(){
+std::vector<Edge> PolygonShape::GetEdges(){    
     edges.clear();
-    for(int i=0; i < (vertices.size()) -1; i++){        
-        edges.push_back(Edge(vertices[i], vertices[i+1]));       
+    for(int i=0; i < (vertices.size()); i++){   
+        // doing some modulo tricks to wrap back to vertex 0 at the last vertex     
+        int currVertex = i;
+        int nextVertex = (i + 1) % this->vertices.size();
+        // edges.push_back(Edge(vertices[i], vertices[i+1]));   
+        edges.push_back(Edge(vertices[currVertex], vertices[nextVertex]));     
     }
-    edges.push_back(Edge(vertices[vertices.size()-1], vertices[0]));
+    //edges.push_back(Edge(vertices[vertices.size()-1], vertices[0]));
     return edges;    
 }
 
