@@ -59,7 +59,7 @@ bool Collisions::isCollidingCircleCircle(Body *a, Body *b, ImpactData &impact){
 }
 
 
-float findMinimumSeparation(const PolygonShape &a, const PolygonShape &b){
+float findMinimumSeparation(const PolygonShape &a, const PolygonShape &b, Vec2 &axis, Vec2 &point){
     float separation = std::numeric_limits<float>::lowest();
 
     for (int i = 0; i < a.vertices.size(); i++){
@@ -67,14 +67,20 @@ float findMinimumSeparation(const PolygonShape &a, const PolygonShape &b){
         Vec2 edgeDir = a.EdgeAt(i).Normal();
 
         float minSeparation = std::numeric_limits<float>::max();
+        Vec2 keepVertexB;
         for (int j = 0; j < b.vertices.size(); j++){
             Vec2 vertexB = b.vertices[j];
-            Vec2 vertexAB = (vertexB - vertexA);
-
-            float projectABtoEdgeDir = vertexAB.Dot(edgeDir);
-            minSeparation = std::min(projectABtoEdgeDir, minSeparation);
+            float projectABtoEdgeDir = (vertexB - vertexA).Dot(edgeDir);
+            if (projectABtoEdgeDir < minSeparation){
+                minSeparation = projectABtoEdgeDir;
+                keepVertexB = vertexB;
+            }
         }
-        
+        if (minSeparation > separation){
+            separation = minSeparation;
+            axis = a.EdgeAt(i);
+            point = keepVertexB;
+        }
         separation = std::max(minSeparation, separation);       
         
     }
@@ -85,11 +91,34 @@ float findMinimumSeparation(const PolygonShape &a, const PolygonShape &b){
 bool Collisions::isCollidingPolygonPolygon(Body *a, Body *b, ImpactData &impact){
     const PolygonShape *sA = (PolygonShape*) a->shape;
     const PolygonShape *sB = (PolygonShape*) b->shape;
-    if(findMinimumSeparation(*sA, *sB) >= 0){
+    Vec2 aAxis, aPoint;
+    Vec2 bAxis, bPoint;
+
+    float ABseparation = findMinimumSeparation(*sA, *sB, aAxis, aPoint);    
+    if(ABseparation >= 0){
         return false;
     }
-    if(findMinimumSeparation(*sB, *sA) >= 0){
+
+    float BAseparation = findMinimumSeparation(*sB, *sA, bAxis, bPoint);
+    if(BAseparation >= 0){
         return false;
     }
+
+    impact.a = a;
+    impact.b = b;
+    if (ABseparation > BAseparation){
+        impact.depth = -ABseparation;
+        impact.collisionNormal = aAxis.Normal();
+        impact.start = aPoint;
+        impact.end = impact.start + (impact.collisionNormal * impact.depth);
+    }
+
+    if (BAseparation > ABseparation){
+        impact.depth = -BAseparation;
+        impact.collisionNormal = bAxis.Normal() * -1;
+        impact.end = bPoint;
+        impact.start = impact.end + (impact.collisionNormal * impact.depth);
+    }
+
     return true;
 }
