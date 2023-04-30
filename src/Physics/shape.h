@@ -58,6 +58,7 @@ class PolygonShape: public Shape {
         void UpdateVertices(const Vec2 &pos, float angle);        
         std::vector<Edge> GetEdges();
         Vec2 EdgeAt(int index) const;  
+        float FindMinSeparation(const PolygonShape* other, Vec2& axis, Vec2& point) const;
 
 };
 

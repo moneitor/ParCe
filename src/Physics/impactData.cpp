@@ -10,32 +10,37 @@ void ImpactData::ProjectionResolve(){
 }
 
 
-void ImpactData::CollisionImpulseResolve(ImpactData &impactData){
-
-    this->ProjectionResolve();
-
-    Body *a = impactData.a;
-    Body *b = impactData.b;
+void ImpactData::CollisionImpulseResolve(){
+    this->ProjectionResolve();    
+   
+    Body *a = this->a;
+    Body *b = this->b;
 
     // We get the minimum boucinesss between both objects
     float elas = std::min(a->bounce, b->bounce);
 
-    // We calculate the relative belocity between a and b
-    Vec2 vrel = a->velocity - b->velocity;
+    Vec2 ra = this->end - a->position;
+    Vec2 rb = this->start - b->position;
 
-    // We get the vector that points between both centroids
-    Vec2 collisionNormal = (b->position - a->position).Normalize();
+    float w = a->angularVelocity;
 
-    // We store the impulse as a float that we will use later
-    float ImpulseMag = -(elas + 1) * vrel.Dot(collisionNormal) / (a->invMass + b->invMass);
+    Vec2 va = a->velocity + Vec2( -(w * ra.y), (w * ra.x)); 
+    Vec2 vb = b->velocity - Vec2( -(w * rb.y), (w * rb.x));
 
-    // Finally we take the impulse magnitude times the Collision normal for the final impulse
+    // We calculate the relative belocity between a and b 
+    const Vec2 vrel = va - vb;
+
+    float numerator = -(1 + elas) * vrel.Dot(this->collisionNormal);
+    float denominator = (a->invMass + b->invMass);
+          denominator += (ra.Cross(this->collisionNormal) * ra.Cross(this->collisionNormal)) * a->invI;
+          denominator += (rb.Cross(this->collisionNormal) * rb.Cross(this->collisionNormal)) * b->invI;
+
+    float ImpulseMag = numerator / denominator;
+
     Vec2 ImpulseDirection = collisionNormal * ImpulseMag;
 
-    if (!(a->isStatic())){
-        a->velocity += ImpulseDirection * a->invMass; // Apply Impulse to A
-    }
-    if (!(b->isStatic())){
-        b->velocity -= ImpulseDirection * b->invMass; // Apply Impulse to B
-    }      
+    Vec2 impulseA = ImpulseDirection * a->invMass;
+    //a->ApplyImpulse(impulseA, ra); 
+    Vec2 impulseB = ImpulseDirection * b->invMass;
+    //b->ApplyImpulse(-impulseB, rb); // Apply Impulse to B
 }

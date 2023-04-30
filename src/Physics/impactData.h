@@ -20,7 +20,7 @@ struct ImpactData{
         float depth;
 
         void ProjectionResolve();   
-        void CollisionImpulseResolve(ImpactData &impactData);                
+        void CollisionImpulseResolve();                
 };
 
 

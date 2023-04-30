@@ -117,7 +117,7 @@ bool Collisions::isCollidingPolygonPolygon(Body *a, Body *b, ImpactData &impact)
         impact.depth = -BAseparation;
         impact.collisionNormal = bAxis.Normal() * -1;
         impact.end = bPoint;
-        impact.start = impact.end + (impact.collisionNormal * impact.depth);
+        impact.start = impact.end - (impact.collisionNormal * impact.depth);
     }
 
     return true;

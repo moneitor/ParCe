@@ -60,6 +60,9 @@ class Body
         
         void screenCollide(const float widht, const float height, float elasticity);   
 
+        void ApplyImpulse(const Vec2 &impulse);
+        void ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec);
+
         void integrateLinear(float dt);
         void integrateAngular(float dt);
 

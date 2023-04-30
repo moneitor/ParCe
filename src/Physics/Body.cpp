@@ -99,6 +99,16 @@ bool Body::isStatic(){
 }
 
 
+void Body::ApplyImpulse(const Vec2 &impulse){
+    this->velocity += impulse * this->invMass;
+}
+
+
+void Body::ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec){
+    this->velocity += impulse * this->invMass;
+    this->angularVelocity += radiusVec.Cross(impulse) * this->invI; // The cross product is returning a float since this is calculated in 2d
+}
+
 
 void Body::integrateLinear(float dt){
     this->acceleration = this->netForce * this->invMass;
@@ -130,7 +140,7 @@ void Body::integrateAngular(float dt){
 
 void Body::integrateBody(float dt){
     if (this->isStatic()){
-        return;
+        //return; Need to do some better shit with this
     }
     
     this->integrateLinear(dt);
