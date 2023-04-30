@@ -59,34 +59,6 @@ bool Collisions::isCollidingCircleCircle(Body *a, Body *b, ImpactData &impact){
 }
 
 
-float findMinimumSeparation(const PolygonShape &a, const PolygonShape &b, Vec2 &axis, Vec2 &point){
-    float separation = std::numeric_limits<float>::lowest();
-
-    for (int i = 0; i < a.vertices.size(); i++){
-        Vec2 vertexA = a.vertices[i];
-        Vec2 edgeDir = a.EdgeAt(i).Normal();
-
-        float minSeparation = std::numeric_limits<float>::max();
-        Vec2 keepVertexB;
-        for (int j = 0; j < b.vertices.size(); j++){
-            Vec2 vertexB = b.vertices[j];
-            float projectABtoEdgeDir = (vertexB - vertexA).Dot(edgeDir);
-            if (projectABtoEdgeDir < minSeparation){
-                minSeparation = projectABtoEdgeDir;
-                keepVertexB = vertexB;
-            }
-        }
-        if (minSeparation > separation){
-            separation = minSeparation;
-            axis = a.EdgeAt(i);
-            point = keepVertexB;
-        }
-        separation = std::max(minSeparation, separation);       
-        
-    }
-    return separation;
-}
-
 
 bool Collisions::isCollidingPolygonPolygon(Body *a, Body *b, ImpactData &impact){
     const PolygonShape *sA = (PolygonShape*) a->shape;
@@ -94,12 +66,12 @@ bool Collisions::isCollidingPolygonPolygon(Body *a, Body *b, ImpactData &impact)
     Vec2 aAxis, aPoint;
     Vec2 bAxis, bPoint;
 
-    float ABseparation = findMinimumSeparation(*sA, *sB, aAxis, aPoint);    
+    float ABseparation = sA->FindMinSeparation(sB, aAxis, aPoint);    
     if(ABseparation >= 0){
         return false;
     }
 
-    float BAseparation = findMinimumSeparation(*sB, *sA, bAxis, bPoint);
+    float BAseparation = sB->FindMinSeparation(sA, bAxis, bPoint);
     if(BAseparation >= 0){
         return false;
     }
