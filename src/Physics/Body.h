@@ -19,7 +19,8 @@ class Body
         int id;
                
         float area;    
-        float bounce;        
+        float bounce;     
+        float friction;   
         static int count;
 
         int __active;

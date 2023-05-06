@@ -2,8 +2,6 @@
 #include <limits>
 
 
-
-
 bool Collisions::isColliding(Body *a, Body *b, ImpactData &impact){
     ShapeType aStype = a->shape->GetType();
     ShapeType bStype = b->shape->GetType();
@@ -15,6 +13,16 @@ bool Collisions::isColliding(Body *a, Body *b, ImpactData &impact){
     if ((aStype == ShapeType::POLYGON || aStype == ShapeType::BOX) && 
         (bStype == ShapeType::POLYGON || bStype == ShapeType::BOX)){
         return Collisions::isCollidingPolygonPolygon(a, b, impact);
+    }
+
+    if ((aStype == ShapeType::POLYGON || aStype == ShapeType::BOX) && 
+        bStype == ShapeType::CIRCLE){
+        return Collisions::isCollidingPolygonCircle(a, b, impact);
+    }
+
+    if (bStype == ShapeType::CIRCLE &&
+        (aStype == ShapeType::POLYGON || aStype == ShapeType::BOX)){
+        return Collisions::isCollidingPolygonCircle(b, a, impact);
     }
 
     return false;
@@ -93,4 +101,35 @@ bool Collisions::isCollidingPolygonPolygon(Body *a, Body *b, ImpactData &impact)
     }
 
     return true;
+}
+
+bool Collisions::isCollidingPolygonCircle(Body *polygon, Body *circle, ImpactData &impact){
+    const PolygonShape *poly = (PolygonShape*) polygon->shape;
+    const std::vector<Vec2> &polyVertices = poly->vertices;
+
+    const CircleShape *bCircle = (CircleShape*) circle->shape;
+
+    Vec2 minVert0;
+    Vec2 minVert1;
+
+    for(int i=0; i < (polyVertices.size()); i++){   
+        // doing some modulo tricks to wrap back to vertex 0 at the last vertex     
+        int vert0 = i;
+        int vert1 = (i + 1) % polyVertices.size();
+
+        Vec2 edge = poly->EdgeAt(i);
+        Vec2 normal = edge.Normal();
+
+        Vec2 vertToCircle = circle->position - polyVertices[i];
+        float projection = vertToCircle.Dot(normal); 
+
+        if (projection > 0){
+            minVert0 = poly->vertices[vert0];
+            minVert1 = poly->vertices[vert1];
+            break;
+        }               
+        Graphics::DrawCircle(minVert0.x, minVert0.y, 5, 0xFF0000FF); 
+        Graphics::DrawCircle(minVert1.x, minVert1.y, 5, 0xFF0000FF); 
+    }
+    return false;
 }

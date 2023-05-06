@@ -21,6 +21,7 @@ struct ImpactData{
 
         void ProjectionResolve();   
         void CollisionImpulseResolve();                
+        void CollisionTangentImpulseResolve();
 };
 
 

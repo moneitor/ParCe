@@ -20,6 +20,7 @@ Body::Body(const Shape &shape, float x, float y, float mass){
 
     this->mass = mass;        
     this->bounce = 1;//default
+    this->friction = 0.1; // default
     this->id = this->count;    
 
     if (this->mass != 0){
