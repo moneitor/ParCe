@@ -20,8 +20,8 @@ bool Collisions::isColliding(Body *a, Body *b, ImpactData &impact){
         return Collisions::isCollidingPolygonCircle(a, b, impact);
     }
 
-    if (bStype == ShapeType::CIRCLE &&
-        (aStype == ShapeType::POLYGON || aStype == ShapeType::BOX)){
+    if (aStype == ShapeType::CIRCLE &&
+        (bStype == ShapeType::POLYGON || bStype == ShapeType::BOX)){
         return Collisions::isCollidingPolygonCircle(b, a, impact);
     }
 
@@ -109,11 +109,12 @@ bool Collisions::isCollidingPolygonCircle(Body *polygon, Body *circle, ImpactDat
 
     const CircleShape *bCircle = (CircleShape*) circle->shape;
 
+    float maxProjection = std::numeric_limits<float>::lowest();;
+
     Vec2 minVert0;
     Vec2 minVert1;
 
-    for(int i=0; i < (polyVertices.size()); i++){   
-        // doing some modulo tricks to wrap back to vertex 0 at the last vertex     
+    for(int i=0; i < (polyVertices.size()); i++){      
         int vert0 = i;
         int vert1 = (i + 1) % polyVertices.size();
 
@@ -122,14 +123,33 @@ bool Collisions::isCollidingPolygonCircle(Body *polygon, Body *circle, ImpactDat
 
         Vec2 vertToCircle = circle->position - polyVertices[i];
         float projection = vertToCircle.Dot(normal); 
+        
 
-        if (projection > 0){
+        while (projection > 0 && projection > maxProjection){
+            maxProjection = projection;
             minVert0 = poly->vertices[vert0];
             minVert1 = poly->vertices[vert1];
-            break;
-        }               
-        Graphics::DrawCircle(minVert0.x, minVert0.y, 5, 0xFF0000FF); 
-        Graphics::DrawCircle(minVert1.x, minVert1.y, 5, 0xFF0000FF); 
+            // break;
+        }           
+        Graphics::DrawFillCircle(minVert0.x, minVert0.y, 5, 0xFF0000FF); 
+        Graphics::DrawFillCircle(minVert1.x, minVert1.y, 5, 0xFF0000FF);   
+
+        
     }
+    Vec2 edgedir = minVert1 - minVert0;
+    Vec2 vertToCircle2 = circle->position - minVert0;
+    float projectionCompare = edgedir.Dot(vertToCircle2);      
+
+    if (projectionCompare <= 0){
+        std::cout << "We are in A " << std::endl;
+    } 
+    if (projectionCompare >= edgedir.Magnitude()){
+        std::cout << "We are in B " << std::endl;
+    }
+    if (projectionCompare > 0 && projectionCompare < edgedir.Magnitude()){
+        std::cout << "We are in Center " << std::endl;
+    }
+
+    
     return false;
 }

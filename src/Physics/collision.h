@@ -3,6 +3,7 @@
 
 #include "Body.h"
 #include "impactData.h"
+#include "../Graphics.h"
 #include <iostream>
 
 struct Collisions{
