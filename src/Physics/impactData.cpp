@@ -31,21 +31,21 @@ void ImpactData::CollisionImpulseResolve(){
 
     float ImpulseMagNormal = numeratorNormal / denominatorNormal;
 
+    Vec2 impulseNormal = this->collisionNormal * ImpulseMagNormal; 
 
-    // Vec2 colNormSwap = Vec2(collisionNormal.y, -collisionNormal.x).Normalize();   
+
     
-    Vec2 colNormSwap = this->collisionNormal.Normal().Normalize();  
+    Vec2 tangent = this->collisionNormal.Normal();  
 
-    float numeratorTangent =  friction * -(1 + elas) * vrel.Dot(colNormSwap);
+    float numeratorTangent = friction * -(1 + elas) * vrel.Dot(tangent);
 
     float denominatorTangent = (a->invMass + b->invMass)
-    + (ra.Cross(colNormSwap) * ra.Cross(colNormSwap)) * a->invI
-    + (rb.Cross(colNormSwap) * rb.Cross(colNormSwap)) * b->invI;
+    + (ra.Cross(tangent) * ra.Cross(tangent)) * a->invI
+    + (rb.Cross(tangent) * rb.Cross(tangent)) * b->invI;
 
-    float ImpulseMagTangent = numeratorTangent / denominatorTangent;
-    
-    Vec2 impulseNormal = this->collisionNormal * ImpulseMagNormal;     
-    Vec2 impulseTangent = this->collisionNormal * ImpulseMagTangent;
+    float ImpulseMagTangent = numeratorTangent / denominatorTangent;    
+        
+    Vec2 impulseTangent = tangent * ImpulseMagTangent;
 
     Vec2 impulse = impulseNormal + impulseTangent;
     a->ApplyImpulse(impulse, ra);     
@@ -55,7 +55,8 @@ void ImpactData::CollisionImpulseResolve(){
 
 void ImpactData::CollisionTangentImpulseResolve(){
     this->ProjectionResolve();          
-    float elas = std::min(a->friction, b->friction);
+    float elas = std::min(a->bounce, b->bounce);
+    float friction = std::min(a->friction, b->friction);
     
     Vec2 ra = this->end - a->position;
     Vec2 rb = this->start - b->position;
@@ -63,19 +64,19 @@ void ImpactData::CollisionTangentImpulseResolve(){
     Vec2 va = a->velocity + Vec2( (-a->angularVelocity * ra.y), (a->angularVelocity * ra.x)); 
     Vec2 vb = b->velocity + Vec2( (-b->angularVelocity * rb.y), (b->angularVelocity * rb.x));
 
-    Vec2 colNormSwap = Vec2(collisionNormal.y, -collisionNormal.x).Normalize();
+    Vec2 tangent = Vec2(collisionNormal.y, -collisionNormal.x).Normalize();
 
     const Vec2 vrel = va - vb;
 
-    float numerator = -(1 + elas) * vrel.Dot(colNormSwap);
+    float numeratorTangent = friction * -(1 + elas) * vrel.Dot(tangent);
 
-    float denominator = (a->invMass + b->invMass)
-    + (ra.Cross(colNormSwap) * ra.Cross(colNormSwap)) * a->invI
-    + (rb.Cross(colNormSwap) * rb.Cross(colNormSwap)) * b->invI;
+    float denominatorTangent = (a->invMass + b->invMass)
+    + (ra.Cross(tangent) * ra.Cross(tangent)) * a->invI
+    + (rb.Cross(tangent) * rb.Cross(tangent)) * b->invI;
 
-    float ImpulseMag = numerator / denominator;
+    float ImpulseMagTangent = numeratorTangent / denominatorTangent;
 
-    Vec2 impulse = colNormSwap * ImpulseMag;       
-    a->ApplyImpulse(impulse, ra);     
-    b->ApplyImpulse(-impulse, rb);
+    Vec2 impulseTangent = tangent * ImpulseMagTangent;       
+    a->ApplyImpulse(impulseTangent, ra);     
+    b->ApplyImpulse(-impulseTangent, rb);
 }

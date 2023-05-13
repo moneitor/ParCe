@@ -37,7 +37,11 @@ ShapeType CircleShape::GetType() const{
 
 // POLYGON
 PolygonShape::PolygonShape(const std::vector<Vec2> &vertices)
-    :restVertices{vertices}{ 
+    :restVertices{vertices}, vertices{vertices}{ 
+        for (auto vertex: vertices){
+            this->restVertices.push_back(vertex);
+            this->vertices.push_back(vertex);
+        }
     }
 
 PolygonShape::PolygonShape(const PolygonShape &other)
@@ -52,7 +56,7 @@ Shape *PolygonShape::Clone( ) const{
 }
 
 float PolygonShape::GetMomentOfInertia()const{
-    return 1/2 ;
+    return 5000.0f ;
 }
 
 void PolygonShape::UpdateVertices(const Vec2 &pos, float angle){
