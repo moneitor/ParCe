@@ -1,4 +1,5 @@
 #include "Body.h"
+#include "../Graphics.h"
 
 
 Body::Body(const Shape &shape, float x, float y, float mass){
@@ -44,6 +45,7 @@ Body::Body(const Shape &shape, float x, float y, float mass){
 
 Body::~Body(){
     delete this->shape;
+    SDL_DestroyTexture(this->tex_map);
     std::cout << "Destructor called. " << std::endl;
 }
 
@@ -147,8 +149,11 @@ void Body::integrateBody(float dt){
     this->integrateLinear(dt);
     this->integrateAngular(dt);
 
-    if (this->shape->GetType() != ShapeType::CIRCLE){
-        PolygonShape *poly = (PolygonShape*)this->shape;
-        poly->UpdateVertices(this->position, this->angle);
-    }
+    shape->UpdateVertices(position, angle);
+}
+
+void Body::SetTexMap(const char* filepath){
+    SDL_Surface *map = IMG_Load(filepath);
+    this->tex_map = SDL_CreateTextureFromSurface(Graphics::renderer, map);
+    SDL_FreeSurface(map);
 }

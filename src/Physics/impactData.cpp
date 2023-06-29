@@ -5,8 +5,11 @@ void ImpactData::ProjectionResolve(){
     float aPushSize = (depth / (a->invMass + b->invMass )) * a->invMass;
     float bPushSize = (depth / (a->invMass + b->invMass )) * b->invMass;
     
-    a->position -= collisionNormal * aPushSize;
-    b->position += collisionNormal * bPushSize;           
+    a->position -= collisionNormal * aPushSize * 0.5;
+    b->position += collisionNormal * bPushSize * 0.5;        
+
+    a->shape->UpdateVertices(a->position, a->angle);
+    b->shape->UpdateVertices(b->position, b->angle);    
 }
 
 
@@ -32,8 +35,6 @@ void ImpactData::CollisionImpulseResolve(){
     float ImpulseMagNormal = numeratorNormal / denominatorNormal;
 
     Vec2 impulseNormal = this->collisionNormal * ImpulseMagNormal; 
-
-
     
     Vec2 tangent = this->collisionNormal.Normal();  
 

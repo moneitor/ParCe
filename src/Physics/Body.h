@@ -7,7 +7,8 @@
 #include "math.h"
 #include <algorithm>
 #include <iostream>
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 
 class Body
@@ -46,7 +47,10 @@ class Body
         float netTorque;
 
         //Pointer to a shape object
-        const Shape *shape = {nullptr}; 
+        Shape *shape = {nullptr}; 
+
+        // Pointer to texture so we can map the shapes
+        SDL_Texture *tex_map = nullptr;
 
         //booleans
         bool isColliding;
@@ -68,6 +72,8 @@ class Body
         void integrateAngular(float dt);
 
         void integrateBody(float dt);
+
+        void SetTexMap(const char* filepath);
 };
 
 #endif

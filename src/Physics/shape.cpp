@@ -4,18 +4,12 @@ Shape::Shape(){
 
 }
 
-Shape::Shape(const Shape &other){}
-
-
 ////////////////////////////
 //CIRCLE
 CircleShape::CircleShape(float radius)
     :radius{radius}  {    
 }
 
-CircleShape::CircleShape(const CircleShape &other)
-    :radius{other.radius} {
-}
 
 CircleShape::~CircleShape(){
     
@@ -23,6 +17,10 @@ CircleShape::~CircleShape(){
 
 Shape *CircleShape::Clone() const{
     return new CircleShape(radius);    
+}
+
+void CircleShape::UpdateVertices(const Vec2 &pos, float angle){
+    return;
 }
 
 float CircleShape::GetMomentOfInertia() const {
@@ -42,10 +40,6 @@ PolygonShape::PolygonShape(const std::vector<Vec2> &vertices)
             this->restVertices.push_back(vertex);
             this->vertices.push_back(vertex);
         }
-    }
-
-PolygonShape::PolygonShape(const PolygonShape &other)
-    :restVertices{other.vertices}{
     }
 
 PolygonShape::~PolygonShape(){    
