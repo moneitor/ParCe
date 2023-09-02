@@ -1,0 +1,5 @@
+/Users/hernan/Documents/learn/physics/2dphysics/build/CMakeFiles/app.dir
+/Users/hernan/Documents/learn/physics/2dphysics/build/CMakeFiles/run.dir
+/Users/hernan/Documents/learn/physics/2dphysics/build/CMakeFiles/cleanapp.dir
+/Users/hernan/Documents/learn/physics/2dphysics/build/CMakeFiles/edit_cache.dir
+/Users/hernan/Documents/learn/physics/2dphysics/build/CMakeFiles/rebuild_cache.dir

@@ -5,8 +5,8 @@ void ImpactData::ProjectionResolve(){
     float aPushSize = (depth / (a->invMass + b->invMass )) * a->invMass;
     float bPushSize = (depth / (a->invMass + b->invMass )) * b->invMass;
     
-    a->position -= collisionNormal * aPushSize * 0.5;
-    b->position += collisionNormal * bPushSize * 0.5;        
+    a->position -= collisionNormal * aPushSize;
+    b->position += collisionNormal * bPushSize;        
 
     a->shape->UpdateVertices(a->position, a->angle);
     b->shape->UpdateVertices(b->position, b->angle);    

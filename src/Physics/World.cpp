@@ -17,7 +17,18 @@ void World::AddBody(Body *body){
     this->bodies.push_back(body);
 }
 
-std::vector<Body*> &World::GetBodies(){
+void World::AddConstraint(RBDConstraint *constraint)
+{
+    this->constraints.push_back(constraint);
+}
+
+std::vector<RBDConstraint *> &World::GetConstraints()
+{
+    return this->constraints;
+}
+
+std::vector<Body *> &World::GetBodies()
+{
     return this->bodies;
 }
 
@@ -47,9 +58,12 @@ void World::Integrate(float dt){
         body->integrateBody(dt);    
     }
 
-    for (int iter = 0; iter < 5; iter++){
-        this->CheckCollisions();
-    }
+    // Temporary iteration approach to solve collisions
+    // for (int iter = 0; iter < 5; iter++){
+    //     this->CheckCollisions();
+    // }
+    CheckCollisions();
+
 }
 
 

@@ -5,6 +5,7 @@
 #include "Body.h"
 #include "constants.h"
 #include "collision.h"
+#include "RBDConstraint.h"
 #include "../Graphics.h"
 
 
@@ -14,6 +15,9 @@ class World{
         ~World();
         
         void AddBody(Body *body);
+        void AddConstraint(RBDConstraint *constraint);
+
+        std::vector<RBDConstraint*> &GetConstraints();
         
         std::vector<Body*> &GetBodies();
 
@@ -26,6 +30,7 @@ class World{
     
     private:
         std::vector <Body*> bodies;
+        std::vector <RBDConstraint*> constraints;
         std::vector <Vec2> forces;
         std::vector <float> torques;
         float gravity;

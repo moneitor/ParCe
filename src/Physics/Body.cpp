@@ -157,3 +157,20 @@ void Body::SetTexMap(const char* filepath){
     this->tex_map = SDL_CreateTextureFromSurface(Graphics::renderer, map);
     SDL_FreeSurface(map);
 }
+
+
+Vec2 Body::LocalSpaceToWorldSpace(const Vec2 &anchor)
+{
+    Vec2 rotated = anchor.Rotate(this->angle);
+    return rotated + position;
+}
+
+Vec2 Body::WorldSpaceToLocalSpace(const Vec2 &anchor)
+{
+    float translatedX = anchor.x - this->position.x;
+    float translatedY = anchor.y - this->position.y;
+    float rotatedX = cos(-angle) * translatedX - sin(-angle) * translatedY;
+    float rotatedY = cos(-angle) * translatedY + sin(-angle) * translatedX;
+
+    return Vec2(rotatedX, rotatedY);
+}

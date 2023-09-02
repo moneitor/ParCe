@@ -74,6 +74,9 @@ class Body
         void integrateBody(float dt);
 
         void SetTexMap(const char* filepath);
+
+        Vec2 LocalSpaceToWorldSpace(const Vec2 &anchor);
+        Vec2 WorldSpaceToLocalSpace(const Vec2 &anchor);
 };
 
 #endif

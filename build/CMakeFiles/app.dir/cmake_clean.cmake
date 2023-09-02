@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/app.dir/src/Application.cpp.o"
+  "CMakeFiles/app.dir/src/Application.cpp.o.d"
+  "CMakeFiles/app.dir/src/Graphics.cpp.o"
+  "CMakeFiles/app.dir/src/Graphics.cpp.o.d"
+  "CMakeFiles/app.dir/src/Main.cpp.o"
+  "CMakeFiles/app.dir/src/Main.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/Body.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/Body.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/Edge.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/Edge.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/MatMN.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/MatMN.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/Particle.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/Particle.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/RBDConstraint.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/RBDConstraint.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/Vec2.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/Vec2.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/VecN.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/VecN.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/World.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/World.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/collision.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/collision.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/constants.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/constants.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/constraints.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/constraints.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/forces.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/forces.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/impactData.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/impactData.cpp.o.d"
+  "CMakeFiles/app.dir/src/Physics/shape.cpp.o"
+  "CMakeFiles/app.dir/src/Physics/shape.cpp.o.d"
+  "app"
+  "app.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/app.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
