@@ -68,10 +68,9 @@ class Body
         void ApplyImpulse(const Vec2 &impulse);
         void ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec);
 
-        void integrateLinear(float dt);
-        void integrateAngular(float dt);
 
-        void integrateBody(float dt);
+        void IntegrateForces(const float dt);
+        void IntegrateVelocities(const float dt);
 
         void SetTexMap(const char* filepath);
 

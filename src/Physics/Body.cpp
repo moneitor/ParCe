@@ -2,6 +2,7 @@
 #include "../Graphics.h"
 
 
+
 Body::Body(const Shape &shape, float x, float y, float mass){
     this->shape = shape.Clone();    
 
@@ -112,45 +113,36 @@ void Body::ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec){
     this->angularVelocity += radiusVec.Cross(impulse) * this->invI; // The cross product is returning a float since this is calculated in 2d
 }
 
-
-void Body::integrateLinear(float dt){
-    this->acceleration = this->netForce * this->invMass;
-    
-    //integrate acceleration gives you velocity
-    this->velocity += this->acceleration * dt;
-
-    //integrate velocity gives position
-    this->position += this->velocity * dt;
-
-    clearForces();
-}
-
-void Body::integrateAngular(float dt){
-    if (this->isStatic()){
+void Body::IntegrateForces(const float dt)
+{
+    if(isStatic())
+    {
         return;
     }
 
+    this->acceleration = this->netForce * invMass;
+    this->velocity += this->acceleration * dt;    
+
     this->angularAcceleration = this->netTorque * invI;
-    
-    //integrate acceleration gives you velocity
     this->angularVelocity += this->angularAcceleration * dt;
 
-    //integrate velocity gives position
-    this->angle += this->angularVelocity * dt;
 
+    clearForces();
     clearAngularForces();
 }
 
-void Body::integrateBody(float dt){
-    if (this->isStatic()){
-        //return; Need to do some better shit with this
+void Body::IntegrateVelocities(const float dt)
+{
+    if(isStatic())
+    {
+        return;
     }
-    
-    this->integrateLinear(dt);
-    this->integrateAngular(dt);
+    this->position += this->velocity * dt;
+    this->angle += this->angularVelocity * dt;
 
-    shape->UpdateVertices(position, angle);
+    this->shape->UpdateVertices(this->position, this->angle);
 }
+
 
 void Body::SetTexMap(const char* filepath){
     SDL_Surface *map = IMG_Load(filepath);

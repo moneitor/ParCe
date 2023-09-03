@@ -57,9 +57,28 @@ void World::Integrate(float dt){
         }      
     }  
 
-    for (auto body: bodies){
-        body->integrateBody(dt);    
+    // 1 = We first need to integrate the forces A = F/M
+    // 2 = Then we need to solve the constraints
+    // 3 = And finally we integrate the velocities
+
+    // 1 = We first need to integrate the forces A = F/M
+    for(auto body: this->bodies)
+    {
+        body->IntegrateForces(dt);
     }
+
+    // 2 = Then we need to solve the constraints
+    for (auto &constraint : this->constraints)
+    {
+        constraint->Solve();
+    }
+
+    // 3 = And finally we integrate the velocities
+    for (auto body: this->bodies)
+    {
+        body->IntegrateVelocities(dt);
+    }
+
 
     // Temporary iteration approach to solve collisions
     // for (int iter = 0; iter < 5; iter++){

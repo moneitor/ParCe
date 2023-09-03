@@ -15,6 +15,7 @@ struct MatMN
 
     void Zero();
     MatMN Transpose() const;
+    static VecN SolveGaussSeidel(const MatMN &mat, const VecN &vec);
 
     const MatMN &operator = (const MatMN &other);
     VecN operator * (const VecN &v) const;
