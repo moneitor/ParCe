@@ -41,15 +41,18 @@ void World::AddTorque(float torque){
 }
 
 void World::Integrate(float dt){
-    for (auto body : bodies){  
+    for (auto body : bodies)
+    {  
         Vec2 weight = Vec2(0, 9.8 * body->mass) * PIXELS_PER_METER;
         body->addForce(weight);
         
-        for (auto force: forces){
+        for (auto force: forces)
+        {
             body->addForce(force);
         }
 
-        for (auto torque: torques){
+        for (auto torque: torques)
+        {
             body->addTorque(torque);
         }      
     }  

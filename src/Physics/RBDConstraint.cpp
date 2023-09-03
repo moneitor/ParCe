@@ -56,4 +56,12 @@ JointConstraint::~JointConstraint()
 
 void JointConstraint::Solve()
 {
+    // Update the Jacobian with the values of the current timestep
+    // V = GetVelocities()
+    // invM = GetInvM()
+    // Calculating lambda -> impulse to apply to objects A and B
+    // Apply lambda impulse to the objects
+
+    
+
 }
