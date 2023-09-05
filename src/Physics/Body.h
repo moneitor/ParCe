@@ -65,8 +65,9 @@ class Body
         
         void screenCollide(const float widht, const float height, float elasticity);   
 
-        void ApplyImpulse(const Vec2 &impulse);
-        void ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec);
+        void ApplyImpulseLinear(const Vec2 &impulse);
+        void ApplyImpulseAngular(const float impulse);
+        void ApplyImpulseAtPoint(const Vec2 &impulse, const Vec2 &radiusVec);
 
 
         void IntegrateForces(const float dt);

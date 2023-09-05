@@ -40,7 +40,7 @@ Body::Body(const Shape &shape, float x, float y, float mass){
     } else {
         this->invI = 0;
     }
-
+    this->shape->UpdateVertices(this->position, this->angle);
     this->count += 1;          
 }
 
@@ -74,6 +74,27 @@ void Body::screenCollide(const float width, const float height, float elasticity
     }
 }
 
+void Body::ApplyImpulseLinear(const Vec2& j) 
+{
+    if (isStatic())
+        return;
+    velocity += j * invMass;
+}
+
+void Body::ApplyImpulseAngular(const float j) 
+{
+    if (isStatic())
+        return;
+    angularVelocity += j * invI;
+}
+
+void Body::ApplyImpulseAtPoint(const Vec2& j, const Vec2& r)
+{
+    if (isStatic())
+        return;
+    velocity += j * invMass;
+    angularVelocity += r.Cross(j) * invI;
+}
 
 void Body::addForce(const Vec2 &force){
     this ->netForce += force;    
@@ -103,15 +124,6 @@ bool Body::isStatic(){
 }
 
 
-void Body::ApplyImpulse(const Vec2 &impulse){
-    this->velocity += impulse * this->invMass;
-}
-
-
-void Body::ApplyImpulse(const Vec2 &impulse, const Vec2 &radiusVec){
-    this->velocity += impulse * this->invMass;
-    this->angularVelocity += radiusVec.Cross(impulse) * this->invI; // The cross product is returning a float since this is calculated in 2d
-}
 
 void Body::IntegrateForces(const float dt)
 {
@@ -151,18 +163,17 @@ void Body::SetTexMap(const char* filepath){
 }
 
 
-Vec2 Body::LocalSpaceToWorldSpace(const Vec2 &anchor)
+Vec2 Body::LocalSpaceToWorldSpace(const Vec2& point)
 {
-    Vec2 rotated = anchor.Rotate(this->angle);
-    return rotated + position;
+    Vec2 rotated = point.Rotate(angle);
+	return rotated + position;
 }
 
-Vec2 Body::WorldSpaceToLocalSpace(const Vec2 &anchor)
+Vec2 Body::WorldSpaceToLocalSpace(const Vec2& point) 
 {
-    float translatedX = anchor.x - this->position.x;
-    float translatedY = anchor.y - this->position.y;
+    float translatedX = point.x - position.x;
+    float translatedY = point.y - position.y;
     float rotatedX = cos(-angle) * translatedX - sin(-angle) * translatedY;
     float rotatedY = cos(-angle) * translatedY + sin(-angle) * translatedX;
-
-    return Vec2(rotatedX, rotatedY);
+	return Vec2(rotatedX, rotatedY);
 }

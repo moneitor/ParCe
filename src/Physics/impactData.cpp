@@ -49,8 +49,8 @@ void ImpactData::CollisionImpulseResolve(){
     Vec2 impulseTangent = tangent * ImpulseMagTangent;
 
     Vec2 impulse = impulseNormal + impulseTangent;
-    a->ApplyImpulse(impulse, ra);     
-    b->ApplyImpulse(-impulse, rb);
+    a->ApplyImpulseAtPoint(impulse, ra);     
+    b->ApplyImpulseAtPoint(-impulse, rb);
 }
 
 
@@ -78,6 +78,6 @@ void ImpactData::CollisionTangentImpulseResolve(){
     float ImpulseMagTangent = numeratorTangent / denominatorTangent;
 
     Vec2 impulseTangent = tangent * ImpulseMagTangent;       
-    a->ApplyImpulse(impulseTangent, ra);     
-    b->ApplyImpulse(-impulseTangent, rb);
+    a->ApplyImpulseAtPoint(impulseTangent, ra);     
+    b->ApplyImpulseAtPoint(-impulseTangent, rb);
 }

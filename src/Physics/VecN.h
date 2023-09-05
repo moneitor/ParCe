@@ -22,7 +22,7 @@ struct VecN
     float operator [] (const int index) const;  // v1[index]
     float &operator [] (const int index);  // v1[index] = value
 
-    float Dot(const VecN v) const;
+    float Dot(const VecN &v) const;
     void Zero();
 
     int N;

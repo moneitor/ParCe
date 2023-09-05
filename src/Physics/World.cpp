@@ -70,7 +70,20 @@ void World::Integrate(float dt){
     // 2 = Then we need to solve the constraints
     for (auto &constraint : this->constraints)
     {
-        constraint->Solve();
+        constraint->PreSolve(dt);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        for (auto &constraint : this->constraints)
+        {
+            constraint->Solve();
+        }
+    }
+
+    for (auto &constraint : this->constraints)
+    {
+        constraint->PostSolve();
     }
 
     // 3 = And finally we integrate the velocities

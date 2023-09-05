@@ -1,42 +1,42 @@
 #pragma once
+
 #include "Body.h"
 #include "MatMN.h"
 
-class RBDConstraint
-{
-public:
-    RBDConstraint() = default;
-    virtual ~RBDConstraint() = default;
+class RBDConstraint {
+    public:
+        Body* a;
+        Body* b;
 
-    MatMN GetInvM() const;
-    VecN GetVelocities() const; // [va.x va.y wa vb.x vb.y wb]
-    
-    virtual void Solve() {};
+        Vec2 aPoint; // The anchor point in A's local space
+        Vec2 bPoint; // The anchor point in B's local space
 
-    Body *a;
-    Body *b;    
+        virtual ~RBDConstraint() = default;
 
-    Vec2 aAnchor;  // This is the anchor in the local space of body a
-    Vec2 bAnchor;  // This is the anchor in the local space of body b
+        MatMN GetInvM() const;
+        VecN GetVelocities() const;
+
+        virtual void PreSolve(const float dt) {}
+        virtual void Solve() {}
+        virtual void PostSolve() {}
 };
 
-
-class JointConstraint : public RBDConstraint
-{
-public:
-    JointConstraint();
-    JointConstraint(Body *a, Body *b, const Vec2 &anchor);
-    ~JointConstraint();
-
-    virtual void Solve() override;
-
-private:
-    MatMN jacobian;
+class JointConstraint: public RBDConstraint {
+    private:
+        MatMN jacobian;
+        VecN cachedlambda;
+        float bias;
     
+    public:
+        JointConstraint();
+        JointConstraint(Body* a, Body* b, const Vec2& anchorPoint);
+        void PreSolve(const float dt) override;
+        void Solve() override;
+        void PostSolve() override;
 };
 
-
-class IntersectionConstraint: public RBDConstraint
-{
+class PenetrationConstraint: public RBDConstraint {
     MatMN jacobian;
+    float bias;
+    // void Solve() override;
 };

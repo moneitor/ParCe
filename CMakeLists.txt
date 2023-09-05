@@ -3,6 +3,7 @@ project(MyApp)
 
 # Set the C++ standard to C++17
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Add the source files and include directories
 file(GLOB_RECURSE SOURCES src/*.cpp src/Physics/*.cpp)
