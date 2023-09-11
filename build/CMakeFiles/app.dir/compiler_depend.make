@@ -6143,7 +6143,8 @@ CMakeFiles/app.dir/src/Physics/RBDConstraint.cpp.o: /Users/hernan/Documents/lear
   /opt/homebrew/include/SDL2/SDL_misc.h \
   /opt/homebrew/include/SDL2/SDL_image.h \
   /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/MatMN.h \
-  /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/VecN.h
+  /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/VecN.h \
+  /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/impactData.h
 
 CMakeFiles/app.dir/src/Physics/Vec2.cpp.o: /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/Vec2.cpp \
   /Users/hernan/Documents/learn/physics/2dphysics/src/Physics/Vec2.h \

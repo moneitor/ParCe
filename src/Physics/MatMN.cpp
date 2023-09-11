@@ -85,10 +85,11 @@ VecN MatMN::SolveGaussSeidel(const MatMN& A, const VecN& b)
     {
 		for (int i = 0; i < N; i++) 
         {
-			if (A.vectors[i][i] != 0.0f)
-            {
-				X[i] += (b[i] / A.vectors[i][i]) - (A.vectors[i].Dot(X) / A.vectors[i][i]);
-			}
+			float change_in_x = (b[i] / A.vectors[i][i]) - (A.vectors[i].Dot(X) / A.vectors[i][i]);
+			if(change_in_x == change_in_x)
+			{
+				X[i] += change_in_x;
+			}			
 		}
 	}
 	return X;

@@ -2,6 +2,7 @@
 
 #include "Body.h"
 #include "MatMN.h"
+#include "impactData.h"
 
 class RBDConstraint {
     public:
@@ -30,13 +31,25 @@ class JointConstraint: public RBDConstraint {
     public:
         JointConstraint();
         JointConstraint(Body* a, Body* b, const Vec2& anchorPoint);
+
         void PreSolve(const float dt) override;
         void Solve() override;
         void PostSolve() override;
 };
 
-class PenetrationConstraint: public RBDConstraint {
-    MatMN jacobian;
+class IntersectionConstraint: public RBDConstraint {
+private:
     float bias;
-    // void Solve() override;
+    Vec2 normal; // Normal of the intersection in BodyA local space
+    float friction; 
+    MatMN jacobian;
+    VecN cachedlambda;
+
+public:
+    IntersectionConstraint();
+    IntersectionConstraint(Body* a, Body* bVec2, Vec2 &aCollision, Vec2 &bCollision, const Vec2 &CollisionNormal);
+
+    void PreSolve(const float dt) override;
+        void Solve() override;
+    void PostSolve() override;
 };

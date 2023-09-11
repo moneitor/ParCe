@@ -53,8 +53,6 @@ class Body
         SDL_Texture *tex_map = nullptr;
 
         //booleans
-        bool isColliding;
-
         bool isStatic();
 
         void addForce(const Vec2 &force);    

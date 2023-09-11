@@ -8,8 +8,13 @@ World::World(float gravity)
 }
 
 World::~World(){
-    for (auto body: this->bodies){
+    for (auto body: this->bodies)
+    {
         delete(body);
+    }
+    for (auto constraint: this->constraints)
+    {
+        delete(constraint);
     }
 }
 
@@ -41,7 +46,10 @@ void World::AddTorque(float torque){
 }
 
 void World::Integrate(float dt){
-    for (auto body : bodies)
+    // Temporary vector of intersection constraints
+    std::vector<IntersectionConstraint> intersections;
+
+    for (auto &body : bodies)
     {  
         Vec2 weight = Vec2(0, 9.8 * body->mass) * PIXELS_PER_METER;
         body->addForce(weight);
@@ -62,10 +70,29 @@ void World::Integrate(float dt){
     // 3 = And finally we integrate the velocities
 
     // 1 = We first need to integrate the forces A = F/M
-    for(auto body: this->bodies)
+    for(auto &body: this->bodies)
     {
         body->IntegrateForces(dt);
     }
+
+    // Detect collisions between bodies
+    for (int i = 0; i <= bodies.size() - 1; i++) {
+        for (int j = i + 1; j < bodies.size(); j++) {
+            Body* a = bodies[i];
+            Body* b = bodies[j];
+           
+            ImpactData impact;
+            if (Collisions::isColliding(a, b, impact)) {
+                // impact.CollisionImpulseResolve();   
+                // Create a new IntersectionConstraint
+                Graphics::DrawCircle(impact.start.x, impact.start.y, 5, 0.0, 0xFF00FFFF);
+                Graphics::DrawCircle(impact.end.x, impact.end.y, 5, 2.0, 0xFF00FFFF);
+
+                IntersectionConstraint intersection = IntersectionConstraint(impact.a, impact.b, impact.start, impact.end, impact.collisionNormal);    
+                intersections.push_back(intersection); 
+            }
+        }
+    } 
 
     // 2 = Then we need to solve the constraints
     for (auto &constraint : this->constraints)
@@ -73,47 +100,43 @@ void World::Integrate(float dt){
         constraint->PreSolve(dt);
     }
 
-    for (int i = 0; i < 10; i++)
+    for (auto &intersection : intersections)
+    {
+        intersection.PreSolve(dt);
+    }
+
+    for (int i = 0; i < 30; i++)
     {
         for (auto &constraint : this->constraints)
         {
             constraint->Solve();
         }
+        for (auto &intersection : intersections)
+        {
+            intersection.Solve();
+        }
     }
+    
 
     for (auto &constraint : this->constraints)
     {
         constraint->PostSolve();
     }
+    for (auto &intersection : intersections)
+    {
+        intersection.PostSolve();
+    }
 
     // 3 = And finally we integrate the velocities
-    for (auto body: this->bodies)
+    for (auto &body: this->bodies)
     {
         body->IntegrateVelocities(dt);
     }
 
-
-    // Temporary iteration approach to solve collisions
-    // for (int iter = 0; iter < 5; iter++){
-    //     this->CheckCollisions();
-    // }
-    CheckCollisions();
-
 }
 
 
-void World::CheckCollisions(){
-    for (int i = 0; i <= bodies.size() - 1; i++) {
-            for (int j = i + 1; j < bodies.size(); j++) {
-                Body* a = bodies[i];
-                Body* b = bodies[j];
-                a->isColliding = false;
-                b->isColliding = false;
-                
-                ImpactData impact;
-                if (Collisions::isColliding(a, b, impact)) {
-                    impact.CollisionImpulseResolve();        
-                }
-            }
-        } 
-    }
+void World::CheckCollisions()
+{
+    
+}

@@ -53,7 +53,7 @@ VecN &VecN::operator=(const VecN &other)
 VecN VecN::operator+(const VecN &other)
 {
 
-    assert(this->N != other.N &&  "Vectors must be same size");
+    // assert(this->N != other.N &&  "Vectors must be same size");
 
     VecN newVec = *this;
     for (int i = 0; i < N; i++)
@@ -65,7 +65,7 @@ VecN VecN::operator+(const VecN &other)
 
 VecN VecN::operator-(const VecN &other)
 {
-    assert(this->N != other.N &&  "Vectors must be same size");
+    // assert(this->N != other.N &&  "Vectors must be same size");
 
     VecN newVec = *this;
     for (int i = 0; i < N; i++)
@@ -93,7 +93,7 @@ const VecN &VecN::operator+=(const VecN &other)
 
 const VecN &VecN::operator-=(const VecN &other)
 {    
-    assert(this->N != other.N &&  "Vectors must be same size");
+    // assert(this->N != other.N &&  "Vectors must be same size");
 
     for (int i = 0; i < N; i++)
 		data[i] -= other.data[i];

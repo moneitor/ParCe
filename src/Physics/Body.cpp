@@ -31,7 +31,6 @@ Body::Body(const Shape &shape, float x, float y, float mass){
         this->invMass = 0.0;
     }
 
-    this->isColliding = false;
 
     I = shape.GetMomentOfInertia() * this->mass; // Final inertia tensor
 
